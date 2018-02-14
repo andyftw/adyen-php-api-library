@@ -14,8 +14,11 @@ class Client
     const ENDPOINT_LIVE                 = "https://pal-live.adyen.com";
     const ENPOINT_TEST_DIRECTORY_LOOKUP = "https://test.adyen.com/hpp/directory/v2.shtml";
     const ENPOINT_LIVE_DIRECTORY_LOOKUP = "https://live.adyen.com/hpp/directory/v2.shtml";
+    const ENDPOINT_TEST_MARKETPAY       = "https://cal-test.adyen.com";
+    const ENDPOINT_LIVE_MARKETPAY       = "https://cal-live.adyen.com";
     const API_VERSION                   = "v30";
     const API_RECURRING_VERSION         = "v25";
+    const API_MARKETPAY_VERSION         = "v3";
 
     /**
      * @var Adyen_Config $config
@@ -38,7 +41,7 @@ class Client
         if (!$config) {
             // create config
             $this->_config = new \Adyen\Config();
-        }elseif ($config instanceof \Adyen\ConfigInterface) {
+        } elseif ($config instanceof \Adyen\ConfigInterface) {
             $this->_config = $config;
         } else {
             throw new \Adyen\AdyenException("This config object is not supported, you need to implement the ConfigInterface");
@@ -79,14 +82,16 @@ class Client
      */
     public function setEnvironment($environment)
     {
-        if($environment == \Adyen\Environment::TEST) {
+        if ($environment == \Adyen\Environment::TEST) {
             $this->_config->set('environment', \Adyen\Environment::TEST);
             $this->_config->set('endpoint', self::ENDPOINT_TEST);
             $this->_config->set('endpointDirectorylookup', self::ENPOINT_TEST_DIRECTORY_LOOKUP);
-        } elseif($environment == \Adyen\Environment::LIVE) {
+            $this->_config->set('endpointMarketPay', self::ENDPOINT_TEST_MARKETPAY);
+        } elseif ($environment == \Adyen\Environment::LIVE) {
             $this->_config->set('environment', \Adyen\Environment::LIVE);
             $this->_config->set('endpoint', self::ENDPOINT_LIVE);
             $this->_config->set('endpointDirectorylookup', self::ENPOINT_LIVE_DIRECTORY_LOOKUP);
+            $this->_config->set('endpointMarketPay', self::ENDPOINT_LIVE_MARKETPAY);
         } else {
             // environment does not exists
             $msg = "This environment does not exists use " . \Adyen\Environment::TEST . ' or ' . \Adyen\Environment::LIVE;
@@ -119,7 +124,8 @@ class Client
         $this->_config->set('merchantAccount', $merchantAccount);
     }
 
-    public function setApplicationName($applicationName) {
+    public function setApplicationName($applicationName)
+    {
         $this->_config->set('applicationName', $applicationName);
     }
 
@@ -172,6 +178,16 @@ class Client
     public function getApiRecurringVersion()
     {
         return self::API_RECURRING_VERSION;
+    }
+
+    /**
+     * Get the version of the MarketPay API endpoint
+     *
+     * @return string
+     */
+    public function getApiMarketPayVersion()
+    {
+        return self::API_MARKETPAY_VERSION;
     }
 
 

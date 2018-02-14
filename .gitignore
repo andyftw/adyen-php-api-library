@@ -12,3 +12,6 @@ composer.lock
 
 # ignore PhpStorm .idea folder
 .idea
+
+# ignore VSCode .vscode folder
+.vscode

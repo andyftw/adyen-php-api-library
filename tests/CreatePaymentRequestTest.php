@@ -10,7 +10,6 @@ namespace Adyen;
  */
 class CreatePaymentRequestTest extends TestCase
 {
-
     public function testCreatePaymentMissingReference()
     {
         // initialize client
@@ -88,7 +87,6 @@ class CreatePaymentRequestTest extends TestCase
 
         // return the result so this can be used in other test cases
         return $result;
-
     }
 
     public function testCreatePaymentWithRecurringSuccess()
@@ -138,7 +136,6 @@ class CreatePaymentRequestTest extends TestCase
 
         // return the result so this can be used in other test cases
         return $result;
-
     }
 
     public function testCreatePaymentSuccessWithMerchantAccountInClient()
@@ -180,7 +177,6 @@ class CreatePaymentRequestTest extends TestCase
 
         // return the result so this can be used in other test cases
         return $result;
-
     }
 
     public function testCreatePaymentSuccessJson()
@@ -234,7 +230,6 @@ class CreatePaymentRequestTest extends TestCase
 
         // return the result so this can be used in other test cases
         return $result;
-
     }
 
     public function testCreatePaymentWrongCvc()
@@ -274,6 +269,4 @@ class CreatePaymentRequestTest extends TestCase
         $this->assertEquals('Refused', $result['resultCode']);
         $this->assertEquals('CVC Declined', $result['refusalReason']);
     }
-
-
 }
