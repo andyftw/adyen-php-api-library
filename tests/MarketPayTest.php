@@ -2,15 +2,22 @@
 
 namespace Adyen;
 
-/**
- * Created by PhpStorm.
- * User: SwiTool
- * Date: 11/15/16
- * Time: 2:05 PM
- */
 class MarketPayTest extends TestCase
 {
-    public function testCreateAccountHolder()
+    public function testAccountHolder()
+    {
+        $account = $this->_createAccountHolder();
+
+        $accountHolderRequest = array(
+            'accountHolderCode' => $account['accountHolderCode']
+        );
+
+        $this->_getAccountHolder($accountHolderRequest);
+
+        $this->_closeAccountHolder($accountHolderRequest);
+    }
+
+    protected function _createAccountHolder()
     {
         // initialize client
         $client = $this->createMarketPayClient();
@@ -89,6 +96,63 @@ class MarketPayTest extends TestCase
 
         // must exists
         $this->assertTrue(isset($result['submittedAsync']));
+
+        // return the result so this can be used in other test cases
+        return $result;
+    }
+
+    protected function _getAccountHolder($params)
+    {
+        // initialize client
+        $client = $this->createMarketPayClient();
+
+        // initialize service
+        $service = new Service\MarketPay($client);
+
+        try {
+            $result = $service->getAccountHolder($params);
+        } catch (\Exception $e) {
+            $this->validateApiPermission($e);
+        }
+
+        // must exists
+        $this->assertTrue(isset($result['pspReference']));
+
+        // must exists
+        $this->assertTrue(isset($result['submittedAsync']));
+
+        // return the result so this can be used in other test cases
+        return $result;
+    }
+
+    protected function _closeAccountHolder($params)
+    {
+        // initialize client
+        $client = $this->createMarketPayClient();
+
+        // initialize service
+        $service = new Service\MarketPay($client);
+
+        try {
+            $result = $service->closeAccountHolder($params);
+        } catch (\Exception $e) {
+            $this->validateApiPermission($e);
+        }
+
+        // must exists
+        $this->assertTrue(isset($result['pspReference']));
+
+        // must exists
+        $this->assertTrue(isset($result['submittedAsync']));
+
+        // must exists
+        $this->assertTrue(isset($result['accountHolderStatus']));
+
+        // must exists
+        $this->assertTrue(isset($result['accountHolderStatus']['status']));
+
+        // possible values: Closed
+        $this->assertEquals('Closed', $result['accountHolderStatus']['status']);
 
         // return the result so this can be used in other test cases
         return $result;
